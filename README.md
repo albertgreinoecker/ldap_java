@@ -19,7 +19,7 @@ Create a `.env` file in the project root:
 
 ```env
 LDAP_URL=ldap://<your-ad-server>
-LDAP_BIND_ON=<username>@<domain>
+LDAP_BIND_ON=<username>@@SYNCHTLINN.local
 LDAP_PASSWORD=<password>
 
 UNTIS_SERVER=https://<school>.webuntis.com
