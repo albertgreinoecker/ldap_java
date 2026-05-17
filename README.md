@@ -26,6 +26,14 @@ UNTIS_SERVER=https://<school>.webuntis.com
 UNTIS_SCHOOL=<school-name>
 UNTIS_USER=<username>
 UNTIS_PASSWORD=<password>
+
+MQTT_HOST=<hivemq-cloud-host>
+MQTT_PORT=8883
+MQTT_TOPIC=<topic>
+MQTT_CLIENT_ID_PUB=htlinn-publisher
+MQTT_CLIENT_ID_SUB=htlinn-subscriber
+MQTT_USERNAME=<mqtt-username>
+MQTT_PASSWORD=<mqtt-password>
 ```
 
 Values for HTL Anichstraße:
@@ -42,6 +50,7 @@ Values for HTL Anichstraße:
 | `io.github.cdimascio:dotenv-java` | 3.0.0 | Load environment variables from `.env` |
 | `com.github.untisapi:untis4j` | v1.3.6 | Untis API client (hosted on GitHub Packages) |
 | `com.microsoft.playwright:playwright` | 1.46.0 | Browser automation for WebUntis scraping |
+| `com.hivemq:hivemq-mqtt-client` | 1.3.3 | MQTT client for HiveMQ Cloud |
 
 ## Usage
 
@@ -72,6 +81,46 @@ try (WebUntisScraper scraper = new WebUntisScraper()) {
 Each `Lesson` record exposes: `day`, `klasse`, `subject`, `room`, `cancelled`.
 
 > **Note:** `setHeadless(false)` is currently set — a browser window will open during scraping.
+
+### MqttPublisher
+
+Connects to a HiveMQ Cloud broker (TLS, port 8883) and publishes 5 test messages to the configured topic.
+
+```
+Simply run main() — all parameters are read directly from .env.
+```
+
+Required `.env` entries:
+
+| Key | Description |
+|---|---|
+| `MQTT_HOST` | HiveMQ Cloud hostname, e.g. `abc123.s1.eu.hivemq.cloud` |
+| `MQTT_PORT` | Port — always `8883` for HiveMQ Cloud |
+| `MQTT_TOPIC` | Topic to publish to, e.g. `htlinn/demo` |
+| `MQTT_CLIENT_ID_PUB` | Unique client ID for the publisher |
+| `MQTT_USERNAME` | HiveMQ Cloud username |
+| `MQTT_PASSWORD` | HiveMQ Cloud password |
+
+### MqttSubscriber
+
+Connects to the same broker, subscribes to the configured topic, and prints every incoming message to the console. Runs until the program is stopped manually.
+
+```
+Simply run main() — all parameters are read directly from .env.
+```
+
+Required `.env` entries:
+
+| Key | Description |
+|---|---|
+| `MQTT_HOST` | HiveMQ Cloud hostname |
+| `MQTT_PORT` | Port — always `8883` for HiveMQ Cloud |
+| `MQTT_TOPIC` | Topic to subscribe to |
+| `MQTT_CLIENT_ID_SUB` | Unique client ID for the subscriber (must differ from the publisher) |
+| `MQTT_USERNAME` | HiveMQ Cloud username |
+| `MQTT_PASSWORD` | HiveMQ Cloud password |
+
+> Start `MqttSubscriber` first, then `MqttPublisher` — both programs run independently.
 
 ---
 

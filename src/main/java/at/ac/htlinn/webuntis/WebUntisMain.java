@@ -18,7 +18,7 @@ public class WebUntisMain {
 //        {
 //            System.out.printf("%s:%d %n", ni.getKey(), ni.getValue());
 //        }
-        LocalDate day = LocalDate.now().plusDays(1);
+        LocalDate day = LocalDate.now();
         untis.dumpTimeTable(6159, day);
 
 
